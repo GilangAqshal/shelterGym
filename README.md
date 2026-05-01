@@ -25,10 +25,6 @@ Here’s a tighter, more search-friendly version that highlights value and avoid
 
 ### Other Versions
 
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [React.js Version](https://github.com/TailAdmin/free-react-tailwind-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
-- [Angular Version](https://github.com/TailAdmin/free-angular-tailwind-dashboard)
 - [Laravel Version](https://github.com/TailAdmin/tailadmin-laravel)
 
 ## 📋 Requirements
