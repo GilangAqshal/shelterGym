@@ -22,7 +22,6 @@ Here’s a tighter, more search-friendly version that highlights value and avoid
 - 🌙 **Built-in Dark Mode** - Ready-to-use modern dark theme for better usability and aesthetics
 - 📊 **Advanced UI Components** - Charts, data tables, forms, calendars, modals, and reusable blocks for complex dashboards
 - 🎯 **Production-Ready Dashboard UI** - Clean, modern interface crafted for real apps, not placeholder demos
-- 🎯 **Production-Ready Dashboard UI** - Clean, modern interface crafted for real apps, not placeholder demos
 
 ### Other Versions
 
