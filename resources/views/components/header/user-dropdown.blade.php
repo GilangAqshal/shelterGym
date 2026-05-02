@@ -23,7 +23,9 @@
             class="w-10 h-10 rounded-full object-cover">
     @endif
 
-       <span class="block mr-1 font-medium text-theme-sm">Langs</span>
+       <span class="block mr-1 font-medium text-theme-sm">
+            {{ auth()->check() ? auth()->user()->name : 'Guest' }}
+        </span>
 
         <!-- Chevron Icon -->
         <svg
@@ -117,7 +119,7 @@
         {{-- <form method="POST" action="#">
             @csrf --}}
             <a
-                href="/signin"
+                href="/auth/login"
                 class="flex items-center w-full gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                 @click="closeDropdown()"
             >

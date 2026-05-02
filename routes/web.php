@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\User\DashboardController as UserDashboard;
-
+use App\Http\Controllers\Admin\PaketMemberController;
+use App\Http\Controllers\Admin\PaketHarianController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -14,12 +15,24 @@ Route::get('/login',  [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
 
+
 // ─── Admin & Owner ───────────────────────────────────────
 Route::middleware(['auth', 'role:owner,admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
+
+        // Paket Member
+        Route::resource('paket-member', PaketMemberController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['paket-member' => 'paketMember']);
+
+        // Paket Harian
+        Route::resource('paket-harian', PaketHarianController::class)
+        ->only(['index', 'store', 'update', 'destroy'])
+        ->parameters(['paket-harian' => 'paketHarian']);
+        
     });
 
 // ─── User ────────────────────────────────────────────────
