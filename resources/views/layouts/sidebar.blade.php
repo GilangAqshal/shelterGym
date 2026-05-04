@@ -18,21 +18,24 @@
     @mouseenter="if (!$store.sidebar.isExpanded) $store.sidebar.setHovered(true)"
     @mouseleave="$store.sidebar.setHovered(false)">
     
-    <!-- Logo Section -->
-    <div class="pt-8 pb-7 flex"
-        :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
-        'xl:justify-center' :
-        'justify-start'">
-        <a href="/">
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="/images/logo/shelterGym.png" alt="Logo" width="120" height="40" />
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="/images/logo/shelterGym.png" alt="Logo" width="120"
-                height="40" />
-            <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
-        </a>
-    </div>
+<!-- Logo Section -->
+<div class="pt-8 pb-7 flex items-center"
+    :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+    'justify-center' :
+    'justify-start px-2'"> <!-- Tambahkan px-2 atau sesuaikan agar sejajar dengan margin menu -->
+    
+    <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+        <!-- Logo Full (Saat Sidebar Terbuka) -->
+        <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
+            <img class="dark:hidden" src="/images/logo/logo.png" alt="Logo" style="width: 154px; height: 32px;" />
+            <img class="hidden dark:block" src="/images/logo/logo_dark.png" alt="Logo" style="width: 154px; height: 32px;" />
+        </div>
+
+        <!-- Logo Icon Only (Saat Sidebar Tertutup) -->
+        <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
+            src="/images/logo/logo_icon.png" alt="Logo" width="32" height="32" />
+    </a>
+</div>
 
     <!-- Navigation Menu -->
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
