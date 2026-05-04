@@ -1,428 +1,263 @@
-# TailAdmin Laravel - Tailwind CSS Free Laravel Dashboard
+# 🏋️ ShelterGym — Web Membership Gym Management System
 
-**TailAdmin Laravel** is a modern, production-ready admin dashboard template powered by **Laravel 12**, **Tailwind CSS v4**, **Alpine.js**, and a clean, modular architecture. TailAdmin is one of the most popular Tailwind CSS dashboard now also available for Larvael. It’s designed for building fast, scalable admin panels, CRM dashboards, SaaS backends, and any data-driven application where clarity and performance matter.
-![TailAdmin - Next.js Dashboard Preview](./tailadmin-laravel.png)
+Sistem informasi berbasis web untuk mengelola membership gym, kunjungan harian, jadwal latihan, serta laporan transaksi secara terintegrasi.
 
-## Quick Links
+---
 
-- [✨ Get TailAdmin Laravel](https://tailadmin.com/laravel)
-- [📄 Documentation](https://tailadmin.com/docs)
-- [⬇️ Download](https://tailadmin.com/download)
-- [🌐 Live Demo](https://laravel-demo.tailadmin.com)
+## 🚀 Fitur Utama
 
-Here’s a tighter, more search-friendly version that highlights value and avoids fluff while keeping your structure intact.
+### 🔐 Autentikasi & Role
 
-## ✨ Key Features
+- Login & Register
+- Multi-role:
+    - **Owner** → Full akses
+    - **Admin** → Kelola operasional
+    - **User (Member)** → Akses personal
 
-- 🚀 **Laravel 12 Core** - Built on the latest Laravel release with improved routing, security, and Blade templating
-- 🎨 **Tailwind CSS v4** - Utility-first styling for rapid, consistent UI development
-- ⚡ **Alpine.js Interactivity** - Lightweight reactivity without a heavy JavaScript framework
-- 📦 **Vite Build System** - Fast dev server, instant HMR, and optimized production builds
-- 📱 **Fully Responsive Layouts** - Smooth, mobile-first design that adapts across all screen sizes
-- 🌙 **Built-in Dark Mode** - Ready-to-use modern dark theme for better usability and aesthetics
-- 📊 **Advanced UI Components** - Charts, data tables, forms, calendars, modals, and reusable blocks for complex dashboards
-- 🎯 **Production-Ready Dashboard UI** - Clean, modern interface crafted for real apps, not placeholder demos
+---
 
-### Other Versions
+### 👤 Manajemen Member
 
-- [Laravel Version](https://github.com/TailAdmin/tailadmin-laravel)
+- Pendaftaran member baru
+- Auto generate:
+    - No Pendaftaran (`REG-YYYYXXXX`)
+    - Kode Member (`MBR-XXXX`)
 
-## 📋 Requirements
+- Aktivasi & status membership
+- Riwayat membership
 
-To set up TailAdmin Laravel, make sure your environment includes:
+---
 
-- **PHP 8.2+**
-- **Composer** (PHP dependency manager)
-- **Node.js 18+** and **npm** (for compiling frontend assets)
-- **Database** - Works with SQLite (default), MySQL, or PostgreSQL
+### 📦 Paket Membership
 
-### Tailwind CSS Laravel Dashboard
+- CRUD paket gym (bulanan, dll)
+- Durasi otomatis (hari)
+- Harga fleksibel
 
-TailAdmin delivers a refined Tailwind CSS Laravel Dashboard experience, combining Laravel’s robust backend with Tailwind’s flexible utility classes. The result is a clean, fast, and customizable dashboard that helps developers build modern admin interfaces without the usual front-end complexity. It’s ideal for teams looking for a Tailwind-powered Laravel starter that stays lightweight and easy to scale.
+---
 
-### Laravel Admin Dashboard
+### 🧾 Kunjungan
 
-If you’re searching for a dependable Laravel Admin Dashboard template that’s easy to set up and ready for production, TailAdmin fits the job. It offers a polished UI, reusable components, optimized performance, and all the essentials needed to launch dashboards, CRM systems, and internal tools quickly. It gives developers a solid foundation, so projects move faster with fewer decisions to worry about.
+#### Member
 
-### Check Your Environment
+- Check-in member
+- Auto invoice (`MEMBER-YYYYXXXX`)
 
-Verify your installations:
+#### Non-Member (Harian)
+
+- Input pengunjung umum
+- Auto invoice (`DAILY-YYYYXXXX`)
+
+---
+
+### 🏋️ Jadwal Latihan
+
+- Jadwal mingguan
+- Detail gerakan latihan:
+    - Nama gerakan
+    - Gambar
+    - Deskripsi
+    - Set & reps
+
+- Urutan latihan
+
+---
+
+### 📊 Dashboard & Laporan
+
+- Statistik kunjungan
+- Grafik menggunakan Chart.js
+- Laporan:
+    - Membership
+    - Kunjungan harian
+    - Pendapatan
+
+---
+
+### 🔔 Notifikasi
+
+- Menggunakan SweetAlert2
+- Feedback interaktif (success, error, dll)
+
+---
+
+## 🧱 Tech Stack
+
+| Layer    | Teknologi                |
+| -------- | ------------------------ |
+| Backend  | Laravel 11               |
+| Frontend | Tailwind CSS + TailAdmin |
+| Database | MySQL                    |
+| Server   | Apache (XAMPP)           |
+| Charts   | Chart.js                 |
+| Alert    | SweetAlert2              |
+| Icons    | Font Awesome             |
+
+---
+
+## ⚙️ Instalasi
+
+### 1. Clone Project
 
 ```bash
-php -v
-composer -V
-node -v
-npm -v
+git clone https://github.com/username/shelterGym.git
+cd shelterGym
 ```
 
-## 🚀 Quick Start Installation
-
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/TailAdmin/tailadmin-laravel.git
-cd tailadmin-laravel
-```
-
-### Step 2: Install PHP Dependencies
+### 2. Install Dependency
 
 ```bash
 composer install
-```
-
-This command will install all Laravel dependencies defined in `composer.json`.
-
-### Step 3: Install Node.js Dependencies
-
-```bash
 npm install
 ```
 
-Or if you prefer yarn or pnpm:
-
-```bash
-# Using yarn
-yarn install
-
-# Using pnpm
-pnpm install
-```
-
-### Step 4: Environment Configuration
-
-Copy the example environment file:
+### 3. Setup Environment
 
 ```bash
 cp .env.example .env
-```
-
-**For Windows users:**
-
-```bash
-copy .env.example .env
-```
-
-**Or create it programmatically:**
-
-```bash
-php -r "file_exists('.env') || copy('.env.example', '.env');"
-```
-
-### Step 5: Generate Application Key
-
-```bash
 php artisan key:generate
 ```
 
-This creates a unique encryption key for your application.
+### 4. Konfigurasi Database
 
-### Step 6: Configure Database
-
-#### Option A: Using MySQL/PostgreSQL
-
-Update your `.env` file with your database credentials:
+Edit file `.env`:
 
 ```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=tailadmin_db
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_DATABASE=shelterGym
+DB_USERNAME=root
+DB_PASSWORD=
 ```
 
-Create the database:
+---
 
-```bash
-# MySQL
-mysql -u root -p -e "CREATE DATABASE tailadmin_db;"
-
-# PostgreSQL
-createdb tailadmin_db
-```
-
-Run migrations:
+### 5. Migrasi Database
 
 ```bash
 php artisan migrate
 ```
 
-### Step 7: (Optional) Seed the Database
+---
 
-If you want sample data:
+### 6. Seeder Data Awal
 
 ```bash
 php artisan db:seed
 ```
 
-### Step 8: Storage Link
+---
 
-Create a symbolic link for file storage:
-
-```bash
-php artisan storage:link
-```
-
-## 🏃 Running the Application
-
-### Development Mode (Recommended)
-
-The easiest way to start development is using the built-in script:
-
-```bash
-composer run dev
-```
-
-This single command starts:
-
-- ✅ Laravel development server (http://localhost:8000)
-- ✅ Vite dev server for hot module reloading
-- ✅ Queue worker for background jobs
-- ✅ Log monitoring
-
-**Access your application at:** [http://localhost:8000](http://localhost:8000)
-
-### Manual Development Setup
-
-If you prefer to run services individually in separate terminal windows:
-
-**Terminal 1 - Laravel Server:**
+### 7. Jalankan Server
 
 ```bash
 php artisan serve
 ```
 
-**Terminal 2 - Frontend Assets:**
-
-```bash
-npm run dev
-```
-
-### Building for Production
-
-#### Build Frontend Assets
-
-```bash
-npm run build
-```
-
-#### Optimize Laravel
-
-```bash
-# Clear and cache configuration
-php artisan config:cache
-
-# Cache routes
-php artisan route:cache
-
-# Cache views
-php artisan view:cache
-
-# Optimize autoloader
-composer install --optimize-autoloader --no-dev
-```
-
-#### Production Environment
-
-Update your `.env` for production:
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
-```
-
-## 🧪 Testing
-
-Run the test suite using Pest:
-
-```bash
-composer run test
-```
-
-Or manually:
-
-```bash
-php artisan test
-```
-
-Run with coverage:
-
-```bash
-php artisan test --coverage
-```
-
-Run specific tests:
-
-```bash
-php artisan test --filter=ExampleTest
-```
-
-## 📜 Available Commands
-
-### Composer Scripts
-
-```bash
-# Start development environment
-composer run dev
-
-# Run tests
-composer run test
-
-# Code formatting (if configured)
-composer run format
-
-# Static analysis (if configured)
-composer run analyze
-```
-
-### NPM Scripts
-
-```bash
-# Start Vite dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Lint JavaScript/TypeScript
-npm run lint
-
-# Format code
-npm run format
-```
-
-### Artisan Commands
-
-```bash
-# Start development server
-php artisan serve
-
-# Run migrations
-php artisan migrate
-
-# Rollback migrations
-php artisan migrate:rollback
-
-# Fresh migrations with seeding
-php artisan migrate:fresh --seed
-
-# Generate application key
-php artisan key:generate
-
-# Clear all caches
-php artisan optimize:clear
-
-# Cache everything for production
-php artisan optimize
-
-# Create symbolic link for storage
-php artisan storage:link
-
-# Start queue worker
-php artisan queue:work
-
-# List all routes
-php artisan route:list
-
-# Create a new controller
-php artisan make:controller YourController
-
-# Create a new model
-php artisan make:model YourModel -m
-
-# Create a new migration
-php artisan make:migration create_your_table
-```
-
-## 📁 Project Structure
+Akses:
 
 ```
-tailadmin-laravel/
-├── app/                    # Application logic
-│   ├── Http/              # Controllers, Middleware, Requests
-│   ├── Models/            # Eloquent models
-│   └── Providers/         # Service providers
-├── bootstrap/             # Framework bootstrap files
-├── config/                # Configuration files
-├── database/              # Migrations, seeders, factories
-│   ├── migrations/
-│   ├── seeders/
-│   └── factories/
-├── public/                # Public assets (entry point)
-│   ├── build/            # Compiled assets (generated)
-│   └── index.php         # Application entry point
-├── resources/             # Views and raw assets
-│   ├── css/              # Stylesheets (Tailwind)
-│   ├── js/               # JavaScript files (Alpine.js)
-│   └── views/            # Blade templates
-├── routes/                # Route definitions
-│   ├── web.php           # Web routes
-│   ├── api.php           # API routes
-│   └── console.php       # Console routes
-├── storage/               # Logs, cache, uploads
-│   ├── app/
-│   ├── framework/
-│   └── logs/
-├── tests/                 # Pest test files
-│   ├── Feature/
-│   └── Unit/
-├── .env.example           # Example environment file
-├── artisan                # Artisan CLI
-├── composer.json          # PHP dependencies
-├── package.json           # Node dependencies
-├── vite.config.js         # Vite configuration
-└── tailwind.config.js     # Tailwind configuration
+http://127.0.0.1:8000
 ```
 
-## 🐛 Troubleshooting
+---
 
-### Common Issues
+## 🗄️ Struktur Database
 
-#### "Class not found" errors
+### Tabel Utama:
 
-```bash
-composer dump-autoload
+- `users`
+- `member`
+- `paketMember`
+- `paketHarian`
+- `kunjunganHarian`
+- `kunjunganMember`
+- `jadwalLatihan`
+- `gerakanLatihan`
+
+---
+
+## 🔗 Relasi Singkat
+
+```
+users → member → paketMember
+       → kunjunganMember
+
+paketHarian → kunjunganHarian
+
+jadwalLatihan → gerakanLatihan
 ```
 
-#### Permission errors on storage/bootstrap/cache
+---
 
-```bash
-chmod -R 775 storage bootstrap/cache
+## 📁 Struktur Project
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Admin/
+│   │   └── User/
+├── Models/
+resources/views/
+├── admin/
+├── user/
+├── auth/
 ```
 
-#### NPM build errors
+---
 
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
+## 🔢 Format Kode Otomatis
 
-#### Clear all caches
+| Field          | Format          |
+| -------------- | --------------- |
+| No Pendaftaran | REG-YYYYXXXX    |
+| Kode Member    | MBR-XXXX        |
+| Invoice Harian | DAILY-YYYYXXXX  |
+| Invoice Member | MEMBER-YYYYXXXX |
 
-```bash
-php artisan optimize:clear
-```
+---
 
-#### Database connection errors
+## 🧠 Catatan Pengembangan
 
-- Check `.env` database credentials
-- Ensure database server is running
-- Verify database exists
+- Gunakan **Middleware Role** untuk pembatasan akses
+- Gunakan **Eloquent Relationship** untuk relasi data
+- Gunakan **Seeder** untuk data awal (admin & paket)
+- Simpan gambar latihan di storage (`storage/app/public`)
 
-## 🔄 Update Log
+---
 
-### [2026-03-15]
+<!-- ## 📌 Todo / Pengembangan Lanjutan
 
-- Fixed PHP 8.5 deprecation warning
+- [ ] Payment Gateway (Midtrans / Xendit)
+- [ ] QR Code Check-in Member
+- [ ] Export PDF laporan
+- [ ] Notifikasi WhatsApp
+- [ ] Mobile App (React Native) -->
 
-### [2025-12-29]
+---
 
-- Added Date Picker in Statistics Chart
+## 👨‍💻 Developer
 
-## License
+Gilang
+Zidan
+Fachri
+Rifqy
+Vachel
+Raka
 
-Refer to our [LICENSE](https://tailadmin.com/license) page for more information.
+---
+
+## 📄 Lisensi
+
+Project ini berbasis riset dari Tempat Gym yang bernama ShelterGym untuk membantu menyelesaikan masalah dengan solusi digital.
+
+---
+
+## ⭐ Penutup
+
+ShelterGym dirancang sebagai sistem manajemen gym modern yang:
+
+- Modular
+- Scalable
+- Mudah dikembangkan
+
+Silakan kembangkan sesuai kebutuhanmu 🚀
