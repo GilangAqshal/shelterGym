@@ -7,6 +7,7 @@ use App\Http\Controllers\User\DashboardController as UserDashboard;
 use App\Http\Controllers\Admin\PaketMemberController;
 use App\Http\Controllers\Admin\PaketHarianController;
 use App\Http\Controllers\Admin\KunjunganHarianController;
+use App\Http\Controllers\Admin\KunjunganMemberController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -38,6 +39,11 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::resource('kunjungan-harian', KunjunganHarianController::class)
         ->only(['index', 'store', 'destroy'])
         ->parameters(['kunjungan-harian' => 'kunjunganHarian']);
+
+        // Kunjungan Member
+        Route::resource('kunjungan-member', KunjunganMemberController::class)
+        ->only(['index', 'store', 'destroy'])
+        ->parameters(['kunjungan-member' => 'kunjunganMember']);
         
     });
 

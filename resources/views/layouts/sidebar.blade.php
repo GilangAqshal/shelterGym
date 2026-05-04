@@ -134,6 +134,30 @@
                     </a>
                 </li>
 
+                <!-- Menu Item: Kunjungan Member -->
+                <li>
+                    <a href="{{ route('admin.kunjungan-member.index') }}"
+                        class="menu-item group"
+                        :class="[
+                            {{ request()->routeIs('admin.kunjungan-member.*') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+                            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+                        ]">
+                        
+                        <span class="{{ request()->routeIs('admin.kunjungan-member.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+                            <!-- Icon Checklist Circle -->
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </span>
+
+                        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                            class="menu-item-text">
+                            Kunjungan Member
+                        </span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
     </div>
