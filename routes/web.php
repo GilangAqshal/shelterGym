@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\User\DashboardController as UserDashboard;
 use App\Http\Controllers\Admin\PaketMemberController;
 use App\Http\Controllers\Admin\PaketHarianController;
+use App\Http\Controllers\Admin\KunjunganHarianController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::resource('paket-harian', PaketHarianController::class)
         ->only(['index', 'store', 'update', 'destroy'])
         ->parameters(['paket-harian' => 'paketHarian']);
+
+        // Kunjungan Harian
+        Route::resource('kunjungan-harian', KunjunganHarianController::class)
+        ->only(['index', 'store', 'destroy'])
+        ->parameters(['kunjungan-harian' => 'kunjunganHarian']);
         
     });
 
@@ -45,7 +51,7 @@ Route::middleware(['auth', 'role:user'])
 
 
 // dashboard pages
-Route::get('', function () {
+Route::get('/papan', function () {
     return view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']);
 })->name('dashboard');
 
@@ -123,25 +129,3 @@ Route::get('/image', function () {
 Route::get('/videos', function () {
     return view('pages.ui-elements.videos', ['title' => 'Videos']);
 })->name('videos');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
