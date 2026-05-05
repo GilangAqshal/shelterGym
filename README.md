@@ -1,4 +1,4 @@
-# 🏋️ ShelterGym — Web Membership Gym Management System
+# 🏋️ ShelterGym | Membership Gym Management System
 
 Sistem informasi berbasis web untuk mengelola membership gym, kunjungan harian, jadwal latihan, serta laporan transaksi secara terintegrasi.
 

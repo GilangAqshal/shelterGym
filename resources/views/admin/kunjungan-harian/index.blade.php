@@ -152,11 +152,20 @@
                 <input type="text" id="previewHarga" readonly placeholder="Otomatis terisi"
                     class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 cursor-not-allowed">
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal</label>
-                <input type="date" name="tanggal" required value="{{ date('Y-m-d') }}"
-                    class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<div>
+    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Kunjungan</label>
+    <div class="relative">
+        <input type="text" name="tanggal" required value="{{ date('Y-m-d') }}"
+            class="datepicker w-full rounded-lg border border-gray-300 px-4 py-2.5 pl-10 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Pilih tanggal">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+        </span>
+    </div>
+</div>
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('modalTambah').classList.add('hidden')"
                     class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
