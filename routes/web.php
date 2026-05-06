@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PaketHarianController;
 use App\Http\Controllers\Admin\KunjunganHarianController;
 use App\Http\Controllers\Admin\KunjunganMemberController;
 use App\Http\Controllers\Admin\JadwalLatihanController;
+use App\Http\Controllers\Admin\MemberController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -60,6 +61,11 @@ Route::middleware(['auth', 'role:owner,admin'])
             ->name('jadwal-latihan.gerakan.update');
         Route::delete('gerakan/{gerakanLatihan}', [JadwalLatihanController::class, 'destroyGerakan'])
             ->name('jadwal-latihan.gerakan.destroy');
+
+        // Member
+        Route::resource('member', MemberController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['member' => 'member']);
         
     });
 
