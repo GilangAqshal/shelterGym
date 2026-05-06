@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Storage;
 class GerakanLatihan extends Model
 {
     protected $table = 'gerakanLatihan';
@@ -18,4 +18,15 @@ class GerakanLatihan extends Model
     {
         return $this->belongsTo(JadwalLatihan::class, 'idJadwal');
     }
+
+    // Accessor URL gambar
+    public function getGambarUrlAttribute(): string
+    {
+        // Gunakan facade Storage yang sudah di-import di atas
+        if ($this->gambarGerakan && Storage::disk('public')->exists($this->gambarGerakan)) {
+            return asset('storage/' . $this->gambarGerakan);
+        }
+        return asset('images/default-gerakan.webp');
+    }
+
 }

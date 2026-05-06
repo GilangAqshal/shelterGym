@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PaketMemberController;
 use App\Http\Controllers\Admin\PaketHarianController;
 use App\Http\Controllers\Admin\KunjunganHarianController;
 use App\Http\Controllers\Admin\KunjunganMemberController;
+use App\Http\Controllers\Admin\JadwalLatihanController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -44,6 +45,21 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::resource('kunjungan-member', KunjunganMemberController::class)
         ->only(['index', 'store', 'destroy'])
         ->parameters(['kunjungan-member' => 'kunjunganMember']);
+
+        // Jadwal Latihan
+        Route::resource('jadwal-latihan', JadwalLatihanController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['jadwal-latihan' => 'jadwalLatihan']);
+
+        // Gerakan Latihan (nested)
+        Route::get('jadwal-latihan/{jadwalLatihan}/detail', [JadwalLatihanController::class, 'detail'])
+            ->name('jadwal-latihan.detail');
+        Route::post('jadwal-latihan/{jadwalLatihan}/gerakan', [JadwalLatihanController::class, 'storeGerakan'])
+            ->name('jadwal-latihan.gerakan.store');
+        Route::post('gerakan/{gerakanLatihan}/update', [JadwalLatihanController::class, 'updateGerakan'])
+            ->name('jadwal-latihan.gerakan.update');
+        Route::delete('gerakan/{gerakanLatihan}', [JadwalLatihanController::class, 'destroyGerakan'])
+            ->name('jadwal-latihan.gerakan.destroy');
         
     });
 

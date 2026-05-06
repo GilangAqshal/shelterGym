@@ -157,7 +157,30 @@
                         </span>
                     </a>
                 </li>
+                
+                <!-- Menu Item: Jadwal Latihan -->
+                <li>
+                    <a href="{{ route('admin.jadwal-latihan.index') }}"
+                        class="menu-item group"
+                        :class="[
+                            {{ request()->routeIs('admin.jadwal-latihan.*') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+                            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+                        ]">
+                        
+                        <span class="{{ request()->routeIs('admin.jadwal-latihan.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+                            <!-- Icon List/Menu -->
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                            </svg>
+                        </span>
 
+                        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                            class="menu-item-text">
+                            Jadwal Latihan
+                        </span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
