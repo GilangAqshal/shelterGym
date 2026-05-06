@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<x-common.page-breadcrumb pageTitle="Gerakan Latihan — {{ $jadwalLatihan->hari }}" />
+<x-common.page-breadcrumb pageTitle="Gerakan Latihan - {{ $jadwalLatihan->hari }}" />
 
 @if(session('success'))
 <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
