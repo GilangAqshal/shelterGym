@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\KunjunganHarianController;
 use App\Http\Controllers\Admin\KunjunganMemberController;
 use App\Http\Controllers\Admin\JadwalLatihanController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\AdminController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -19,7 +20,15 @@ Route::get('/login',  [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
 
-
+// ─── Owner Only ──────────────────────────────────────────
+Route::middleware(['auth', 'role:owner'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('admin', AdminController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['admin' => 'admin']);
+    });
 // ─── Admin & Owner ───────────────────────────────────────
 Route::middleware(['auth', 'role:owner,admin'])
     ->prefix('admin')

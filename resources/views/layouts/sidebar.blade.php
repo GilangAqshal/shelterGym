@@ -64,6 +64,32 @@
                         </span>
                     </a>
                 </li>
+                
+                {{-- Menu khusus Owner --}}
+                @if(auth()->user()->role === 'owner')
+                <li>
+                    <a href="{{ route('admin.admin.index') }}"
+                        class="menu-item group"
+                        :class="[
+                            {{ request()->routeIs('admin.admin.*') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+                            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+                        ]">
+                        
+                        <span class="{{ request()->routeIs('admin.admin.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+                            <!-- Icon User Shield / Admin -->
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </span>
+
+                        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                            class="menu-item-text">
+                            Manajemen Admin
+                        </span>
+                    </a>
+                </li>
+                @endif
 
                 <!-- Menu Item: Paket Member -->
                 <li>
