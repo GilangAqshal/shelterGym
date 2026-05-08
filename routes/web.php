@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\KunjunganMemberController;
 use App\Http\Controllers\Admin\JadwalLatihanController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\LaporanController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -75,7 +76,12 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::resource('member', MemberController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['member' => 'member']);
-        
+
+        // Laporan
+        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
+        Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
+                
     });
 
 // ─── User ────────────────────────────────────────────────

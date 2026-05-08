@@ -207,6 +207,29 @@
                         </span>
                     </a>
                 </li>
+
+                {{-- Menu Item: Laporan --}}
+                <li>
+                    <a href="{{ route('admin.laporan.index') }}"
+                        class="menu-item group"
+                        :class="[
+                            {{ request()->routeIs('admin.laporan.*') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+                            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+                        ]">
+                        
+                        <span class="{{ request()->routeIs('admin.laporan.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+                            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </span>
+
+                        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                            class="menu-item-text">
+                            Laporan
+                        </span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
