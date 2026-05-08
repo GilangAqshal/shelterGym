@@ -50,8 +50,8 @@
 
             <!-- Logo (mobile only) -->
             <a href="/" class="xl:hidden">
-                <img class="dark:hidden" src="/images/logo/shelterGym.png" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/shelterGym.png" alt="Logo" />
+                <img class="dark:hidden" src="/images/logo/logo.png" alt="Logo" />
+                <img class="hidden dark:block" src="/images/logo/logo_dark.png" alt="Logo" />
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

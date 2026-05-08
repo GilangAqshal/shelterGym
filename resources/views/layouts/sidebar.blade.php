@@ -136,6 +136,31 @@
                         </span>
                     </a>
                 </li>
+
+                <!-- Menu Item: Data Member -->
+<li>
+    <a href="{{ route('admin.member.index') }}"
+        class="menu-item group"
+        :class="[
+            {{ request()->routeIs('admin.member.*') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+        ]">
+        
+        <span class="{{ request()->routeIs('admin.member.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+            <!-- Icon Users -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+            </svg>
+
+
+        </span>
+
+        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+              class="menu-item-text">
+            Data Member
+        </span>
+    </a>
+</li>
                 
                 <!-- Menu Item: Kunjungan Harian -->
                 <li>
