@@ -85,6 +85,7 @@ Route::middleware(['auth', 'role:user'])
     });
 
 // ─── TailAdmin Demo Pages (ganti nama yang bentrok) ──────
+// ─── Merapihkan routes demo dari TailAdmin ──────
 Route::get('/papan', fn() => view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']))->name('dashboard.demo');
 Route::get('/calendar', fn() => view('pages.calender', ['title' => 'Calendar']))->name('calendar');
 Route::get('/profile-demo', fn() => view('pages.profile', ['title' => 'Profile']))->name('profile.demo');
