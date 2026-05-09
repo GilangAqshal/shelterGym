@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\JadwalLatihanController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\ProfileController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', fn() => redirect()->route('login'));
@@ -20,6 +21,50 @@ Route::get('/', fn() => redirect()->route('login'));
 Route::get('/login',  [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
+
+// ─── Profile (semua role) ────────────────────────────────
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
+
+// ─── Admin & Owner ───────────────────────────────────────
+Route::middleware(['auth', 'role:owner,admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
+        Route::resource('paket-member', PaketMemberController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['paket-member' => 'paketMember']);
+        Route::resource('paket-harian', PaketHarianController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['paket-harian' => 'paketHarian']);
+        Route::resource('kunjungan-harian', KunjunganHarianController::class)
+            ->only(['index', 'store', 'destroy'])
+            ->parameters(['kunjungan-harian' => 'kunjunganHarian']);
+        Route::resource('kunjungan-member', KunjunganMemberController::class)
+            ->only(['index', 'store', 'destroy'])
+            ->parameters(['kunjungan-member' => 'kunjunganMember']);
+        Route::resource('jadwal-latihan', JadwalLatihanController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['jadwal-latihan' => 'jadwalLatihan']);
+        Route::get('jadwal-latihan/{jadwalLatihan}/detail', [JadwalLatihanController::class, 'detail'])
+            ->name('jadwal-latihan.detail');
+        Route::post('jadwal-latihan/{jadwalLatihan}/gerakan', [JadwalLatihanController::class, 'storeGerakan'])
+            ->name('jadwal-latihan.gerakan.store');
+        Route::post('gerakan/{gerakanLatihan}/update', [JadwalLatihanController::class, 'updateGerakan'])
+            ->name('jadwal-latihan.gerakan.update');
+        Route::delete('gerakan/{gerakanLatihan}', [JadwalLatihanController::class, 'destroyGerakan'])
+            ->name('jadwal-latihan.gerakan.destroy');
+        Route::resource('member', MemberController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['member' => 'member']);
+        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
+        Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
+    });
 
 // ─── Owner Only ──────────────────────────────────────────
 Route::middleware(['auth', 'role:owner'])
@@ -30,59 +75,6 @@ Route::middleware(['auth', 'role:owner'])
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['admin' => 'admin']);
     });
-// ─── Admin & Owner ───────────────────────────────────────
-Route::middleware(['auth', 'role:owner,admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-
-        // Paket Member
-        Route::resource('paket-member', PaketMemberController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->parameters(['paket-member' => 'paketMember']);
-
-        // Paket Harian
-        Route::resource('paket-harian', PaketHarianController::class)
-        ->only(['index', 'store', 'update', 'destroy'])
-        ->parameters(['paket-harian' => 'paketHarian']);
-
-        // Kunjungan Harian
-        Route::resource('kunjungan-harian', KunjunganHarianController::class)
-        ->only(['index', 'store', 'destroy'])
-        ->parameters(['kunjungan-harian' => 'kunjunganHarian']);
-
-        // Kunjungan Member
-        Route::resource('kunjungan-member', KunjunganMemberController::class)
-        ->only(['index', 'store', 'destroy'])
-        ->parameters(['kunjungan-member' => 'kunjunganMember']);
-
-        // Jadwal Latihan
-        Route::resource('jadwal-latihan', JadwalLatihanController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->parameters(['jadwal-latihan' => 'jadwalLatihan']);
-
-        // Gerakan Latihan (nested)
-        Route::get('jadwal-latihan/{jadwalLatihan}/detail', [JadwalLatihanController::class, 'detail'])
-            ->name('jadwal-latihan.detail');
-        Route::post('jadwal-latihan/{jadwalLatihan}/gerakan', [JadwalLatihanController::class, 'storeGerakan'])
-            ->name('jadwal-latihan.gerakan.store');
-        Route::post('gerakan/{gerakanLatihan}/update', [JadwalLatihanController::class, 'updateGerakan'])
-            ->name('jadwal-latihan.gerakan.update');
-        Route::delete('gerakan/{gerakanLatihan}', [JadwalLatihanController::class, 'destroyGerakan'])
-            ->name('jadwal-latihan.gerakan.destroy');
-
-        // Member
-        Route::resource('member', MemberController::class)
-            ->only(['index', 'store', 'update', 'destroy'])
-            ->parameters(['member' => 'member']);
-
-        // Laporan
-        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
-        Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
-        Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
-                
-    });
 
 // ─── User ────────────────────────────────────────────────
 Route::middleware(['auth', 'role:user'])
@@ -92,83 +84,21 @@ Route::middleware(['auth', 'role:user'])
         Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
     });
 
-
-// dashboard pages
-Route::get('/papan', function () {
-    return view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']);
-})->name('dashboard');
-
-// calender pages
-Route::get('/calendar', function () {
-    return view('pages.calender', ['title' => 'Calendar']);
-})->name('calendar');
-
-// profile pages
-Route::get('/profile', function () {
-    return view('pages.profile', ['title' => 'Profile']);
-})->name('profile');
-
-// form pages
-Route::get('/form-elements', function () {
-    return view('pages.form.form-elements', ['title' => 'Form Elements']);
-})->name('form-elements');
-
-// tables pages
-Route::get('/basic-tables', function () {
-    return view('pages.tables.basic-tables', ['title' => 'Basic Tables']);
-})->name('basic-tables');
-
-// pages
-
-Route::get('/blank', function () {
-    return view('pages.blank', ['title' => 'Blank']);
-})->name('blank');
-
-// error pages
-Route::get('/error-404', function () {
-    return view('pages.errors.error-404', ['title' => 'Error 404']);
-})->name('error-404');
-
-// chart pages
-Route::get('/line-chart', function () {
-    return view('pages.chart.line-chart', ['title' => 'Line Chart']);
-})->name('line-chart');
-
-Route::get('/bar-chart', function () {
-    return view('pages.chart.bar-chart', ['title' => 'Bar Chart']);
-})->name('bar-chart');
-
-
-// authentication pages
-Route::get('/signin', function () {
-    return view('pages.auth.signin', ['title' => 'Sign In']);
-})->name('signin');
-
-Route::get('/signup', function () {
-    return view('pages.auth.signup', ['title' => 'Sign Up']);
-})->name('signup');
-
-// ui elements pages
-Route::get('/alerts', function () {
-    return view('pages.ui-elements.alerts', ['title' => 'Alerts']);
-})->name('alerts');
-
-Route::get('/avatars', function () {
-    return view('pages.ui-elements.avatars', ['title' => 'Avatars']);
-})->name('avatars');
-
-Route::get('/badge', function () {
-    return view('pages.ui-elements.badges', ['title' => 'Badges']);
-})->name('badges');
-
-Route::get('/buttons', function () {
-    return view('pages.ui-elements.buttons', ['title' => 'Buttons']);
-})->name('buttons');
-
-Route::get('/image', function () {
-    return view('pages.ui-elements.images', ['title' => 'Images']);
-})->name('images');
-
-Route::get('/videos', function () {
-    return view('pages.ui-elements.videos', ['title' => 'Videos']);
-})->name('videos');
+// ─── TailAdmin Demo Pages (ganti nama yang bentrok) ──────
+Route::get('/papan', fn() => view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']))->name('dashboard.demo');
+Route::get('/calendar', fn() => view('pages.calender', ['title' => 'Calendar']))->name('calendar');
+Route::get('/profile-demo', fn() => view('pages.profile', ['title' => 'Profile']))->name('profile.demo');
+Route::get('/form-elements', fn() => view('pages.form.form-elements', ['title' => 'Form Elements']))->name('form-elements');
+Route::get('/basic-tables', fn() => view('pages.tables.basic-tables', ['title' => 'Basic Tables']))->name('basic-tables');
+Route::get('/blank', fn() => view('pages.blank', ['title' => 'Blank']))->name('blank');
+Route::get('/error-404', fn() => view('pages.errors.error-404', ['title' => 'Error 404']))->name('error-404');
+Route::get('/line-chart', fn() => view('pages.chart.line-chart', ['title' => 'Line Chart']))->name('line-chart');
+Route::get('/bar-chart', fn() => view('pages.chart.bar-chart', ['title' => 'Bar Chart']))->name('bar-chart');
+Route::get('/signin', fn() => view('pages.auth.signin', ['title' => 'Sign In']))->name('signin');
+Route::get('/signup', fn() => view('pages.auth.signup', ['title' => 'Sign Up']))->name('signup');
+Route::get('/alerts', fn() => view('pages.ui-elements.alerts', ['title' => 'Alerts']))->name('alerts');
+Route::get('/avatars', fn() => view('pages.ui-elements.avatars', ['title' => 'Avatars']))->name('avatars');
+Route::get('/badge', fn() => view('pages.ui-elements.badges', ['title' => 'Badges']))->name('badges');
+Route::get('/buttons', fn() => view('pages.ui-elements.buttons', ['title' => 'Buttons']))->name('buttons');
+Route::get('/image', fn() => view('pages.ui-elements.images', ['title' => 'Images']))->name('images');
+Route::get('/videos', fn() => view('pages.ui-elements.videos', ['title' => 'Videos']))->name('videos');
