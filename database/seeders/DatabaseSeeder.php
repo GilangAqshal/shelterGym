@@ -29,6 +29,16 @@ class DatabaseSeeder extends Seeder
             'noTelp'   => '08987654321',
         ]);
 
+        // --- TAMBAHAN ROLE USER DISINI ---
+        User::create([
+            'name'     => 'Langs',
+            'email'    => 'langs16@gmail.com',
+            'password' => Hash::make('langs16'), // Password otomatis ter-Bcrypt
+            'role'     => 'user',
+            'noTelp'   => '081292700357',
+            'jenis_kelamin' => 'Laki-laki', // Sesuaikan dengan nama kolom di database kamu
+        ]);
+
         // Paket Member
         DB::table('paketMember')->insert([
             ['namaPaket'=>'Paket 1 Bulan',  'durasiPaket'=>30,  'hargaPaket'=>125000, 'deskripsiPaket'=>'Akses gym 1 bulan', 'created_at'=>now(), 'updated_at'=>now()],

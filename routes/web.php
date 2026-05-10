@@ -82,6 +82,7 @@ Route::middleware(['auth', 'role:user'])
     ->name('user.')
     ->group(function () {
         Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
+        Route::get('/jadwal', [UserDashboard::class, 'jadwal'])->name('jadwal');
     });
 
 // ─── TailAdmin Demo Pages (ganti nama yang bentrok) ──────

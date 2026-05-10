@@ -43,27 +43,52 @@
             <ul class="flex flex-col gap-1">
                 
                 <!-- Menu Item: Dashboard -->
-                <li>
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="menu-item group"
-                        :class="[
-                            {{ request()->routeIs('admin.dashboard') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
-                            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
-                        ]">
-                        
-                        <span class="{{ request()->routeIs('admin.dashboard') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
-                            <!-- Icon Dashboard (Grid) -->
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
+<li>
+    <a href="{{ auth()->user()->role === 'user' ? route('user.dashboard') : route('admin.dashboard') }}"
+        class="menu-item group"
+        :class="[
+            {{ request()->routeIs('*.dashboard') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+        ]">
+        
+        <span class="{{ request()->routeIs('*.dashboard') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+        </span>
 
-                        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                              class="menu-item-text">
-                            Dashboard
-                        </span>
-                    </a>
-                </li>
+        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+            class="menu-item-text">
+            Dashboard
+        </span>
+    </a>
+</li>
+
+{{-- Menu khusus User (Hanya muncul jika login sebagai User) --}}
+@if(auth()->user()->role === 'user')
+<li>
+    <a href="{{ route('user.jadwal') }}"
+        class="menu-item group"
+        :class="[
+            {{ request()->routeIs('user.jadwal') ? 'true' : 'false' }} ? 'menu-item-active' : 'menu-item-inactive',
+            (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'xl:justify-center' : 'justify-start'
+        ]">
+        
+        <span class="{{ request()->routeIs('user.jadwal') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+        </span>
+
+        <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+            class="menu-item-text">
+            Jadwal Latihan
+        </span>
+    </a>
+</li>
+@endif
                 
                 {{-- Menu khusus Owner --}}
                 @if(auth()->user()->role === 'owner')
