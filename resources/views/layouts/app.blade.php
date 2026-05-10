@@ -8,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('logicon.ico') }}">
     <title>{{ $title ?? 'Dashboard' }} | GYM CMS</title>
 
+    
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
