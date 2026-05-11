@@ -114,7 +114,13 @@
 
     <div class="min-h-screen xl:flex">
         @include('layouts.backdrop')
-        @include('layouts.sidebar')
+        @auth
+            @if(auth()->user()->role === 'user')
+                @include('layouts.sidebaru')
+            @else
+                @include('layouts.sidebar')
+            @endif
+        @endauth
 
         <div class="flex-1 transition-all duration-300 ease-in-out"
             :class="{

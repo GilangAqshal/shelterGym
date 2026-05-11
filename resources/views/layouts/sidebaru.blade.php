@@ -50,7 +50,7 @@
 
    
 
-    <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+    <a href="{{ route('user.dashboard') }}" class="flex items-center">
 
         <!-- Logo Full (Saat Sidebar Terbuka) -->
 
