@@ -1,4 +1,5 @@
 @extends('layouts.app')
+{{-- @extends('layouts.appu') --}}
 
 @section('content')
 <x-common.page-breadcrumb pageTitle="Dashboard" />

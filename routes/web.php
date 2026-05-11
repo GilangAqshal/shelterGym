@@ -85,6 +85,7 @@ Route::middleware(['auth', 'role:user'])
         Route::get('/jadwal', [UserDashboard::class, 'jadwal'])->name('jadwal');
     });
 
+    
 // ─── TailAdmin Demo Pages (ganti nama yang bentrok) ──────
 // ─── Merapihkan routes demo dari TailAdmin ──────
 Route::get('/papan', fn() => view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']))->name('dashboard.demo');
