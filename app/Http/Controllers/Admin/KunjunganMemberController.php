@@ -43,7 +43,22 @@ class KunjunganMemberController extends Controller
             'tanggal.required'  => 'Tanggal wajib diisi.',
         ]);
 
-        // Cek apakah member sudah check-in hari ini
+        $member = \App\Models\Member::findOrFail($request->idMember);
+
+        // ── Validasi status aktif ──────────────────────────
+        if ($member->statusMember !== 'aktif') {
+            return redirect()->route('admin.kunjungan-member.index')
+                ->with('error', 'Member ini sudah tidak aktif. Tidak bisa check-in.');
+        }
+
+        // ── Validasi tanggal kunjungan dalam masa berlaku ──
+        $tanggal = \Carbon\Carbon::parse($request->tanggal);
+        if ($tanggal->isAfter(\Carbon\Carbon::parse($member->tanggalAkhir))) {
+            return redirect()->route('admin.kunjungan-member.index')
+                ->with('error', 'Tanggal kunjungan melebihi masa berlaku member.');
+        }
+
+        // ── Validasi sudah check-in hari ini ──────────────
         $sudahCheckin = KunjunganMember::where('idMember', $request->idMember)
                             ->whereDate('tanggal', $request->tanggal)
                             ->exists();

@@ -13,7 +13,10 @@
 
     {{-- Logo --}}
     <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-blue-600">🏋️ ShelterGym</h1>
+        <h1 class="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600">
+            <img src="/images/logo/logo_icon.png" alt="ShelterGym" class="w-10 h-10">
+                ShelterGym
+        </h1>
         <p class="text-gray-500 mt-1 text-sm">Masuk ke akun kamu</p>
     </div>
 
