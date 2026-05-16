@@ -14,6 +14,7 @@
         <h1 class="text-6xl font-bold text-red-500 mb-2">403</h1>
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-3">
             Akses Ditolak
+            
         </h2>
         <p class="text-gray-500 dark:text-gray-400 mb-8">
             Kamu tidak memiliki izin untuk mengakses halaman ini.
