@@ -73,3 +73,17 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 });
+
+// Daftarkan fungsi ke window object agar bisa dipanggil dari atribut onclick HTML
+window.transitionToLogin = function (event, url) {
+    // 1. Cegah browser langsung pindah halaman
+    event.preventDefault();
+
+    // 2. Jalankan efek visual (contoh: menambahkan kelas animasi)
+    document.body.classList.add("transition-fade");
+
+    // 3. Pindah halaman setelah animasi selesai (misal: 300ms)
+    setTimeout(() => {
+        window.location.href = url;
+    }, 300);
+};

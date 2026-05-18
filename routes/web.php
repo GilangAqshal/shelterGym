@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\ProfileController;
 
 // ─── Redirect root ───────────────────────────────────────
-Route::get('/', fn() => redirect()->route('login'));
+Route::get('/', function () {
+    return view('index'); // Kita akan buat file landing.blade.php
+});
 
 // ─── Auth ────────────────────────────────────────────────
 Route::get('/login',  [LoginController::class, 'index'])->name('login');

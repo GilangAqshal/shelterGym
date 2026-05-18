@@ -10,7 +10,13 @@
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
 <div class="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
-
+                    <a href="/"
+                        class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M12.7083 5L7.5 10.2083L12.7083 15.4167" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        
+                    </a>
     {{-- Logo --}}
     <div class="text-center mb-8">
         <h1 class="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600">
