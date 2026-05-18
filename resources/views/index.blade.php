@@ -102,12 +102,13 @@
     </div>
 </section>
 
-    <section id="pricing" class="py-24 bg-white px-6">
+<section id="pricing" class="py-24 bg-white px-6">
     <div class="max-w-7xl mx-auto text-center">
         <h2 class="text-3xl font-bold italic">PAKET MEMBER</h2>
         <p class="mt-4 text-gray-600 mb-12">Pilih paket yang paling pas buat kantong dan targetmu.</p>
         
         <div class="grid md:grid-cols-3 gap-8">
+            <!-- PAKET 1 BULAN -->
             <div class="border-2 border-gray-100 p-8 rounded-3xl hover:border-blue-600 transition group">
                 <h3 class="font-bold text-xl text-gray-400 group-hover:text-blue-600">1 BULAN</h3>
                 <p class="text-4xl font-black my-6">Rp 125.000</p>
@@ -116,9 +117,11 @@
                     <li>Bebas Jam Latihan</li>
                     <li>Konsultasi Alat</li>
                 </ul>
-                <button class="w-full bg-gray-100 group-hover:bg-blue-600 group-hover:text-white py-3 rounded-xl font-bold transition">Pilih Paket</button>
+                <!-- Menggunakan tag <a> dengan tambahan block dan text-center agar penuh layaknya button -->
+                <a href="{{ route('login') }}" class="block text-center w-full bg-gray-100 group-hover:bg-blue-600 group-hover:text-white py-3 rounded-xl font-bold transition">Pilih Paket</a>
             </div>
 
+            <!-- PAKET 3 BULAN -->
             <div class="border-2 border-blue-600 p-8 rounded-3xl relative shadow-xl shadow-blue-100">
                 <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold">BEST VALUE</span>
                 <h3 class="font-bold text-xl text-blue-600">3 BULAN</h3>
@@ -128,9 +131,10 @@
                     <li>Hemat Rp 75.000</li>
                     <li>Bebas Jam Latihan</li>
                 </ul>
-                <button class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Pilih Paket</button>
+                <a href="{{ route('login') }}" class="block text-center w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">Pilih Paket</a>
             </div>
 
+            <!-- PAKET 6 BULAN -->
             <div class="border-2 border-gray-100 p-8 rounded-3xl hover:border-blue-600 transition group">
                 <h3 class="font-bold text-xl text-gray-400 group-hover:text-blue-600">6 BULAN</h3>
                 <p class="text-4xl font-black my-6">Rp 500.000</p>
@@ -139,7 +143,7 @@
                     <li>Hemat Rp 250.000</li>
                     <li>Paling Hemat & Puas</li>
                 </ul>
-                <button class="w-full bg-gray-100 group-hover:bg-blue-600 group-hover:text-white py-3 rounded-xl font-bold transition">Pilih Paket</button>
+                <a href="{{ route('login') }}" class="block text-center w-full bg-gray-100 group-hover:bg-blue-600 group-hover:text-white py-3 rounded-xl font-bold transition">Pilih Paket</a>
             </div>
         </div>
     </div>
