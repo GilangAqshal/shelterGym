@@ -38,7 +38,13 @@
         @csrf
         {{-- Alert Register Sukses --}}
         @if(session('success_register'))
-        <div class="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-600 dark:text-green-400 rounded-xl px-4 py-3 mb-5 text-sm">
+        <div x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 3000)"
+            x-transition:leave="transition ease-in duration-500"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-600 dark:text-green-400 rounded-xl px-4 py-3 mb-5 text-sm">
             ✅ {{ session('success_register') }}
         </div>
         @endif

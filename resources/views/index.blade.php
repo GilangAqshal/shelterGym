@@ -209,7 +209,7 @@
                                 <i class="fa-brands fa-instagram text-2xl"></i>
                                 <div>
                                     <p class="text-xs text-pink-600/70 font-normal">Instagram</p>
-                                    <p class="text-sm md:text-base">@sheltergym.id</p>
+                                    <p class="text-sm md:text-base">sheltergymoffc</p>
                                 </div>
                             </div>
                             <span class="text-sm font-bold group-hover:translate-x-1 transition">→</span>
@@ -220,7 +220,7 @@
                                 <i class="fa-brands fa-tiktok text-2xl"></i>
                                 <div>
                                     <p class="text-xs text-gray-400 font-normal">TikTok</p>
-                                    <p class="text-sm md:text-base">@sheltergym</p>
+                                    <p class="text-sm md:text-base">sheltergym</p>
                                 </div>
                             </div>
                             <span class="text-sm font-bold group-hover:translate-x-1 transition">→</span>
