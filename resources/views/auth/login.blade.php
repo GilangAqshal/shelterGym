@@ -36,6 +36,12 @@
     {{-- Form --}}
     <form action="{{ route('login.post') }}" method="POST" class="space-y-5">
         @csrf
+        {{-- Alert Register Sukses --}}
+        @if(session('success_register'))
+        <div class="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-600 dark:text-green-400 rounded-xl px-4 py-3 mb-5 text-sm">
+            ✅ {{ session('success_register') }}
+        </div>
+        @endif
 
         {{-- Input Email --}}
         <div>
@@ -86,6 +92,12 @@
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl shadow-md transition-all active:scale-[0.98]">
             Masuk
         </button>
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+            Belum punya akun?
+            <a href="{{ route('register') }}" class="text-blue-600 hover:underline dark:text-blue-400 font-medium">
+                Daftar di sini
+            </a>
+        </p>
     </form>
 </div>
 

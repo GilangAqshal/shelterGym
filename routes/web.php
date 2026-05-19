@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', function () {
@@ -23,6 +25,8 @@ Route::get('/', function () {
 Route::get('/login',  [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
+Route::get('/register',  [RegisterController::class, 'index'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 // ─── Profile (semua role) ────────────────────────────────
 Route::middleware(['auth'])->group(function () {
