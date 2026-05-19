@@ -17,6 +17,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Semua kolom tambahan disatukan di sini:
+            $table->string('role')->default('user');
+            $table->string('noTelp')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->text('alamat')->nullable(); // Kolom baru
+            $table->string('foto')->nullable();   // Kolom baru
+            
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,7 +44,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
     }
-
     /**
      * Reverse the migrations.
      */

@@ -52,7 +52,7 @@
                     Bangun Tubuh Ideal di <span class="text-blue-600">Shelter Gym</span>
                 </h1>
                 <p class="text-gray-600 mt-6 text-lg">
-                    Fasilitas lengkap, trainer berpengalaman, dan komunitas yang suportif untuk membantu mencapai goals fitness Anda.
+                    Fasilitas lengkapp, trainer berpengalaman, dan komunitas yang suportif untuk membantu mencapai goals fitness Anda.
                 </p>
                 <div class="mt-10 flex gap-4">
                     <a href="#pricing" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:shadow-xl transition">Ambil Promo</a>
