@@ -95,37 +95,44 @@ class MemberController extends Controller
             ->with('success', 'Data member berhasil ditambahkan.');
     }
 
-    public function update(Request $request, Member $member)
-    {
-        $request->validate([
-            'idPaket'      => 'required|exists:paketMember,idPaket',
-            'tanggalDaftar'=> 'required|date',
-            'statusMember' => 'required|in:aktif,tidak aktif',
-            'noTelp'       => 'nullable|string|max:20',
-        ]);
+public function update(Request $request, Member $member)
+{
+    $request->validate([
+        'idPaket'      => 'required|exists:paketMember,idPaket',
+        'statusMember' => 'required|in:aktif,tidak aktif',
+        'noTelp'       => 'nullable|string|max:20',
+    ]);
 
-        $paket        = PaketMember::findOrFail($request->idPaket);
-        $tanggalAkhir = Carbon::parse($request->tanggalDaftar)
-                            ->addDays($paket->durasiPaket)
-                            ->format('Y-m-d');
+    $data = [
+        'idPaket'      => $request->idPaket,
+        'noTelp'       => $request->noTelp,
+        'statusMember' => $request->statusMember,
+    ];
 
-        $member->update([
-            'idPaket'      => $request->idPaket,
-            'noTelp'       => $request->noTelp,
-            'statusMember' => $request->statusMember,
-            'tanggalDaftar'=> $request->tanggalDaftar,
-            'tanggalAkhir' => $tanggalAkhir,
-        ]);
+    // Jika diaktifkan → isi tanggal otomatis
+    if ($request->statusMember === 'aktif' && $member->statusMember !== 'aktif') {
+        $paket = \App\Models\PaketMember::findOrFail($request->idPaket);
+        $data['tanggalDaftar'] = today()->format('Y-m-d');
+        $data['tanggalAkhir']  = today()->addDays($paket->durasiPaket)->format('Y-m-d');
 
-        // Update nama & noTelp di tabel users juga
-        $member->user->update([
-            'name'   => $request->name ?? $member->user->name,
-            'noTelp' => $request->noTelp,
-        ]);
-
-        return redirect()->route('admin.member.index')
-            ->with('success', 'Data member berhasil diperbarui.');
+        // Tandai notifikasi terkait sebagai sudah dibaca
+        \App\Models\Notifikasi::where('idUser', $member->idUser)
+            ->where('tipe', 'pembelian_member')
+            ->where('isRead', 0)
+            ->update(['isRead' => 1]);
     }
+
+    // Update nama & noTelp di tabel users juga
+    if ($request->filled('name')) {
+        $member->user->update(['name' => $request->name]);
+    }
+    $member->user->update(['noTelp' => $request->noTelp]);
+
+    $member->update($data);
+
+    return redirect()->route('admin.member.index')
+        ->with('success', 'Data member berhasil diperbarui.');
+}
 
     public function destroy(Member $member)
     {

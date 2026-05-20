@@ -226,23 +226,27 @@
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between mb-5">
             <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Edit Member</h4>
-            <button onclick="document.getElementById('modalEdit').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">✕</button>
+            <button onclick="document.getElementById('modalEdit').classList.add('hidden')"
+                class="text-gray-400 hover:text-gray-600">✕</button>
         </div>
         <form id="formEdit" method="POST" class="space-y-4">
             @csrf @method('PUT')
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap</label>
                 <input type="text" id="editName" name="name" required
                     class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Telepon</label>
                 <input type="text" id="editNoTelp" name="noTelp"
                     class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paket Member</label>
-                <select id="editPaket" name="idPaket" required onchange="updateTanggalAkhir('edit')"
+                <select id="editPaket" name="idPaket" required
                     class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     @foreach($paket as $p)
                     <option value="{{ $p->idPaket }}" data-durasi="{{ $p->durasiPaket }}">
@@ -251,17 +255,7 @@
                     @endforeach
                 </select>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Daftar</label>
-                <input type="text" id="editTanggalDaftar" name="tanggalDaftar" required
-                    onchange="updateTanggalAkhir('edit')"
-                    class="datepicker w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Berlaku s/d (otomatis)</label>
-                <input type="text" id="previewTanggalAkhirEdit" readonly
-                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 cursor-not-allowed">
-            </div>
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
                 <select id="editStatus" name="statusMember" required
@@ -270,11 +264,23 @@
                     <option value="tidak aktif">Tidak Aktif</option>
                 </select>
             </div>
+
+            {{-- Info tanggal otomatis --}}
+            <div id="infoTanggalOtomatis" class="hidden rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 px-4 py-3">
+                <p class="text-xs text-blue-700 dark:text-blue-400">
+                    ℹ️ Saat status diubah ke <strong>Aktif</strong>, tanggal daftar dan tanggal akhir akan dihitung otomatis oleh sistem.
+                </p>
+            </div>
+
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('modalEdit').classList.add('hidden')"
-                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">Batal</button>
+                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
+                    Batal
+                </button>
                 <button type="submit"
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Update</button>
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                    Update
+                </button>
             </div>
         </form>
     </div>
@@ -294,27 +300,52 @@ function updateTanggalAkhir(mode) {
     const dateId    = mode === 'tambah' ? 'tanggalDaftarTambah' : 'editTanggalDaftar';
     const previewId = mode === 'tambah' ? 'previewTanggalAkhirTambah' : 'previewTanggalAkhirEdit';
 
-    const idPaket  = document.getElementById(selectId).value;
-    const tglDaftar = document.getElementById(dateId).value;
+    const selectEl = document.getElementById(selectId);
+    const dateEl   = document.getElementById(dateId);
+    const previewEl = document.getElementById(previewId);
+
+    // Validasi aman jika elemen tidak ditemukan (seperti pada modal edit)
+    if (!selectEl || !dateEl || !previewEl) return;
+
+    const idPaket   = selectEl.value;
+    const tglDaftar = dateEl.value;
 
     if (idPaket && tglDaftar && paketDurasi[idPaket]) {
         const durasi = paketDurasi[idPaket];
         const hasil  = new Date(tglDaftar);
         hasil.setDate(hasil.getDate() + durasi);
-        document.getElementById(previewId).value = hasil.toLocaleDateString('id-ID', {
+        previewEl.value = hasil.toLocaleDateString('id-ID', {
             day: '2-digit', month: 'long', year: 'numeric'
         });
     }
 }
 
 function editMember(id, name, noTelp, idPaket, tanggalDaftar, status) {
-    document.getElementById('formEdit').action  = `/admin/member/${id}`;
-    document.getElementById('editName').value   = name;
-    document.getElementById('editNoTelp').value = noTelp;
-    document.getElementById('editPaket').value  = idPaket;
-    document.getElementById('editTanggalDaftar').value = tanggalDaftar;
-    document.getElementById('editStatus').value = status;
-    updateTanggalAkhir('edit');
+    // 1. Atur action form dan isi value dasar input
+    document.getElementById('formEdit').action   = `/admin/member/${id}`;
+    document.getElementById('editName').value    = name;
+    document.getElementById('editNoTelp').value  = noTelp;
+    document.getElementById('editPaket').value   = idPaket;
+    document.getElementById('editStatus').value  = status;
+    
+    // 2. Handle info tanggal otomatis berdasarkan status member
+    const infoEl = document.getElementById('infoTanggalOtomatis');
+    const statusEl = document.getElementById('editStatus');
+
+    function toggleInfo() {
+        if (statusEl.value === 'aktif') {
+            infoEl.classList.remove('hidden');
+        } else {
+            infoEl.classList.add('hidden');
+        }
+    }
+
+    // Menggunakan .onchange memastikan listener lama tertimpa 
+    // ketika tombol edit member lain diklik berturut-turut
+    statusEl.onchange = toggleInfo;
+    toggleInfo();
+
+    // 3. Tampilkan modal edit
     document.getElementById('modalEdit').classList.remove('hidden');
 }
 </script>

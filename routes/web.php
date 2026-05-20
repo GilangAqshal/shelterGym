@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
-
+use App\Http\Controllers\User\MemberController as UserMemberController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', function () {
@@ -89,6 +89,10 @@ Route::middleware(['auth', 'role:user'])
     ->group(function () {
         Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
         Route::get('/jadwal', [UserDashboard::class, 'jadwal'])->name('jadwal');
+        Route::get('/riwayat', [UserMemberController::class, 'riwayat'])->name('riwayat');
+        Route::post('/member/beli', [UserMemberController::class, 'beli'])->name('member.beli');
+        Route::post('/member/edit', [UserMemberController::class, 'edit'])->name('member.edit');
+        Route::post('/member/checkin', [UserMemberController::class, 'checkin'])->name('member.checkin');
     });
 
     
