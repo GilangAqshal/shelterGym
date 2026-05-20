@@ -18,12 +18,13 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             
-            // Semua kolom tambahan disatukan di sini:
+            // Kolom tambahan yang sudah disesuaikan dengan Controller:
             $table->string('role')->default('user');
             $table->string('noTelp')->nullable();
-            $table->string('jenis_kelamin')->nullable();
-            $table->text('alamat')->nullable(); // Kolom baru
-            $table->string('foto')->nullable();   // Kolom baru
+            $table->string('jenisKelamin')->nullable(); // Diubah menjadi jenisKelamin
+            $table->date('tanggalLahir')->nullable();   // Tambahan kolom baru!
+            $table->text('alamat')->nullable();
+            $table->string('foto')->nullable();
             
             $table->rememberToken();
             $table->timestamps();

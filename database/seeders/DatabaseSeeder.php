@@ -13,30 +13,38 @@ class DatabaseSeeder extends Seeder
     {
         // Owner
         User::create([
-            'name'     => 'OwnerSG ',
-            'email'    => 'OwnerSG@gmail.com',
-            'password' => Hash::make('owner123'),
-            'role'     => 'owner',
-            'noTelp'   => '08123456789',
+            'name'         => 'OwnerSG ',
+            'email'        => 'OwnerSG@gmail.com',
+            'password'     => Hash::make('owner123'),
+            'role'         => 'owner',
+            'noTelp'       => '08123456789',
+            'jenisKelamin' => 'Laki-laki',
+            'tanggalLahir' => '1990-01-01',
+            'alamat'       => 'Jakarta',
         ]);
 
         // Admin
         User::create([
-            'name'     => 'Admin ShelterGym',
-            'email'    => 'adminSG@gmail.com',
-            'password' => Hash::make('admin123'),
-            'role'     => 'admin',
-            'noTelp'   => '08987654321',
+            'name'         => 'Admin ShelterGym',
+            'email'        => 'adminSG@gmail.com',
+            'password'     => Hash::make('admin123'),
+            'role'         => 'admin',
+            'noTelp'       => '08987654321',
+            'jenisKelamin' => 'Laki-laki',
+            'tanggalLahir' => '1995-05-05',
+            'alamat'       => 'Jakarta',
         ]);
 
         // --- TAMBAHAN ROLE USER DISINI ---
         User::create([
-            'name'     => 'Langs',
-            'email'    => 'langs16@gmail.com',
-            'password' => Hash::make('langs16'), // Password otomatis ter-Bcrypt
-            'role'     => 'user',
-            'noTelp'   => '081292700357',
-            'jenis_kelamin' => 'Laki-laki', // Sesuaikan dengan nama kolom di database kamu
+            'name'         => 'Langs',
+            'email'        => 'langs16@gmail.com',
+            'password'     => Hash::make('langs16'), 
+            'role'         => 'user',
+            'noTelp'       => '081292700357',
+            'jenisKelamin' => 'Laki-laki', 
+            'tanggalLahir' => '2000-04-18', 
+            'alamat'       => 'Bekasi', 
         ]);
 
         // Paket Member
