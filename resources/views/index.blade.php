@@ -840,7 +840,8 @@
                            placeholder="Masukkan Email..."
                            class="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/10 outline-none focus:border-blue-500 text-white">
 
-                    <a href="{{ route('login') }}" class="bg-gradient-to-r from-blue-600 to-cyan-500 py-4 rounded-2xl font-bold hover:scale-[1.02] transition">
+                    <a href="{{ route('login') }}" 
+                    class="bg-gradient-to-r from-blue-600 to-cyan-500 py-4 rounded-2xl font-bold hover:scale-[1.02] transition">
                         Subscribe Sekarang
                     </a>
 

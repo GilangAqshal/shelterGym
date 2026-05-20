@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\MemberController as UserMemberController;
+use App\Http\Controllers\Admin\NotifikasiController;
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', function () {
@@ -70,6 +71,12 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
         Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
+
+        // 
+        Route::post('notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markRead'])
+            ->name('notifikasi.read');
+        Route::post('notifikasi/read-all', [NotifikasiController::class, 'markAllRead'])
+            ->name('notifikasi.read-all');
     });
 
 // ─── Owner Only ──────────────────────────────────────────
