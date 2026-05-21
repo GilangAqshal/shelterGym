@@ -16,6 +16,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* ================= WAVE ANIMATION ================= */
+.sg-wave-animation{
+    animation: sgWaveMove 8s ease-in-out infinite;
+}
+
+@keyframes sgWaveMove{
+    0%{
+        transform: translateX(0px);
+    }
+
+    50%{
+        transform: translateX(-20px);
+    }
+
+    100%{
+        transform: translateX(0px);
+    }
+}
+
+/* ================= SOCIAL ICON ================= */
+.sg-social-icon{
+    transition: all .3s ease;
+}
+
+.sg-social-icon:hover{
+    transform: translateY(-6px) scale(1.08);
+    box-shadow: 0 0 20px rgba(59,130,246,0.4);
+}
+
+/* ================= FOOTER LINK ================= */
+.sg-footer-link{
+    transition: .3s;
+}
+
+.sg-footer-link:hover{
+    transform: translateY(-2px);
+    color: #60a5fa;
+}
+
         *{
             font-family: 'Poppins', sans-serif;
         }
@@ -724,8 +763,27 @@
     </div>
 </section>
 
+<!-- ================= FOOTER WAVE ================= -->
+<div class="relative -mb-1 overflow-hidden leading-none">
+
+    <svg
+        class="relative block w-full h-[80px] md:h-[120px] sg-wave-animation"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none">
+
+        <path
+            fill="#030712"
+            fill-opacity="1"
+            d="M0,192L60,181.3C120,171,240,149,360,154.7C480,160,600,192,720,186.7C840,181,960,139,1080,122.7C1200,107,1320,117,1380,122.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+        </path>
+
+    </svg>
+
+</div>
+
 <!-- ================= FOOTER ================= -->
-<footer class="relative overflow-hidden bg-gray-950 text-white pt-20">
+<footer class="relative overflow-hidden bg-gray-950 text-white pt-10">
 
     <!-- GLOW -->
     <div class="absolute top-0 left-0 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl"></div>
@@ -750,30 +808,34 @@
                 <!-- SOCIAL -->
                 <div class="flex gap-4 mt-8 justify-center md:justify-start">
 
-                    {{-- <a href="#"
-                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-blue-600">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a> --}}
-
+                    <!-- INSTAGRAM -->
                     <a href="https://www.instagram.com/sheltergymoffc/"
-                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-pink-600">
+                       target="_blank"
+                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-pink-600 transition duration-300">
+
                         <i class="fa-brands fa-instagram"></i>
                     </a>
 
+                    <!-- TIKTOK -->
                     <a href="https://www.tiktok.com/@shelter.gym"
-                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-black">
+                       target="_blank"
+                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-black transition duration-300">
+
                         <i class="fa-brands fa-tiktok"></i>
                     </a>
 
+                    <!-- WHATSAPP -->
                     <a href="https://wa.me/628118843030"
-                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-emerald-600">
+                       target="_blank"
+                       class="sg-social-icon w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-emerald-600 transition duration-300">
+
                         <i class="fa-brands fa-whatsapp"></i>
                     </a>
 
                 </div>
             </div>
 
-            <!-- MENU -->
+            <!-- NAVIGASI -->
             <div>
 
                 <h3 class="text-xl font-bold mb-6">
@@ -805,7 +867,7 @@
                 </div>
             </div>
 
-            <!-- SERVICES -->
+            <!-- LAYANAN -->
             <div>
 
                 <h3 class="text-xl font-bold mb-6">
@@ -815,7 +877,7 @@
                 <div class="flex flex-col gap-4 text-gray-400">
 
                     <p class="sg-footer-link">Arena Panco</p>
-                    <p class="sg-footer-link">Fitness Exerciess</p>
+                    <p class="sg-footer-link">Fitness Exercises</p>
                     <p class="sg-footer-link">Weight Machine</p>
                     <p class="sg-footer-link">Cardio Machine</p>
                     <p class="sg-footer-link">Free Weight</p>
@@ -840,8 +902,9 @@
                            placeholder="Masukkan Email..."
                            class="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/10 outline-none focus:border-blue-500 text-white">
 
-                    <a href="{{ route('login') }}" 
-                    class="bg-gradient-to-r from-blue-600 to-cyan-500 py-4 rounded-2xl font-bold hover:scale-[1.02] transition">
+                    <a href="{{ route('login') }}"
+                       class="bg-gradient-to-r from-blue-600 to-cyan-500 py-4 rounded-2xl font-bold hover:scale-[1.02] transition text-center">
+
                         Subscribe Sekarang
                     </a>
 
@@ -864,6 +927,7 @@
         </div>
 
     </div>
+
 </footer>
 
 <!-- ================= JAVASCRIPT ================= -->
