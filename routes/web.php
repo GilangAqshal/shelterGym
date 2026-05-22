@@ -23,10 +23,15 @@ Route::get('/', function () {
 });
 
 // ─── Auth ────────────────────────────────────────────────
-Route::get('/login',  [LoginController::class, 'index'])->name('login');
+// Di dalam routes/web.php kamu
+Route::get('/login', function () {
+    return view('auth.login', ['startWithRegister' => false]);
+})->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
-Route::get('/register',  [RegisterController::class, 'index'])->name('register');
+Route::get('/register', function () {
+    return view('auth.login', ['startWithRegister' => true]);
+})->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 // ─── Profile (semua role) ────────────────────────────────
