@@ -139,6 +139,11 @@
                         <label class="flex items-center gap-2 text-gray-300 md:text-gray-600 cursor-pointer select-none">
                             <input type="checkbox" name="remember" class="rounded border-white/20 md:border-gray-300 bg-white/5 md:bg-white text-blue-600 focus:ring-blue-500"> Ingat saya
                         </label>
+                        {{-- TAMBAHKAN LINK INI --}}
+                        <a href="{{ route('password.request') }}"
+                            class="text-blue-400 md:text-blue-600 hover:underline text-sm font-medium transition">
+                            Lupa password?
+                        </a>
                     </div>
 
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 md:hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">

@@ -16,6 +16,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\MemberController as UserMemberController;
 use App\Http\Controllers\Admin\NotifikasiController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', function () {
@@ -33,6 +36,16 @@ Route::get('/register', function () {
     return view('auth.login', ['startWithRegister' => true]);
 })->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+
+// ─── Forgot & Reset Password ─────────────────────────────
+Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])
+    ->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+    ->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'index'])
+    ->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
 
 // ─── Profile (semua role) ────────────────────────────────
 Route::middleware(['auth'])->group(function () {
