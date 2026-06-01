@@ -44,6 +44,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan session:table --force",
             "@php artisan migrate:fresh --force --ansi",
             "@php artisan db:seed --force"
         ],
