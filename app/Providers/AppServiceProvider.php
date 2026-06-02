@@ -22,8 +22,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Jika aplikasi diakses lewat HTTPS (seperti di domain Railway), 
         // paksa semua asset dan form action menggunakan skema HTTPS.
+        // if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        //     URL::forceScheme('https');
+        // }
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-            URL::forceScheme('https');
+            \Illuminate\Support\Facades\URL::forceScheme('https');
         }
     }
 }
