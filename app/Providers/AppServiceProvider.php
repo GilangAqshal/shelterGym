@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Carbon::setLocale('id');
+        // Jika aplikasi diakses lewat HTTPS (seperti di domain Railway), 
+        // paksa semua asset dan form action menggunakan skema HTTPS.
+        // if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        //     URL::forceScheme('https');
+        // }
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
