@@ -354,14 +354,26 @@
                     class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
                     Batal
                 </button>
-                <button type="submit"
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                    Kirim Permintaan
+                <button type="button"
+                 onclick="document.getElementById('Pembayaran').classList.remove('hidden')"
+                 class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                Pembayaran
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+{{-- ===== MODAL BELI MEMBER ===== --}}
+<div id="Pembayaran" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex items-center justify-between mb-5">
+            <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Pilih Pembayaran</h4>
+            <button onclick="document.getElementById('modalBeliMember').classList.add('hidden')"
+                class="text-gray-400 hover:text-gray-600">✕</button>
+        </div>
+
+
 
 {{-- ===== MODAL EDIT MEMBER ===== --}}
 @if($member)
