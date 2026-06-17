@@ -349,95 +349,113 @@
                 </p>
             </div>
 
-            <div class="flex justify-end gap-3 pt-2">
+           <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('modalBeliMember').classList.add('hidden')"
                     class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
                     Batal
                 </button>
-                <button type="button"
-                 onclick="document.getElementById('Pembayaran').classList.remove('hidden')"
-                 class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                Pembayaran
+                <button type="button" onclick="bukaModalPembayaran()"
+                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                    Pembayaran
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-{{-- ===== MODAL BELI MEMBER ===== --}}
-<div id="Pembayaran" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+{{-- ===== MODAL PILIH METODE PEMBAYARAN ===== --}}
+<div id="Pembayaran" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
         <div class="flex items-center justify-between mb-5">
-            <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Pilih Pembayaran</h4>
-            <button onclick="document.getElementById('modalBeliMember').classList.add('hidden')"
-                class="text-gray-400 hover:text-gray-600">✕</button>
+            <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Metode Pembayaran</h4>
+            <button type="button" onclick="tutupModalPembayaran()" class="text-gray-400 hover:text-gray-600">✕</button>
         </div>
 
+        <div class="mb-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+            <p class="text-xs text-gray-400">Paket Yang Dipilih:</p>
+            <p id="detailNamaPaket" class="text-sm font-bold text-gray-800 dark:text-white mt-0.5">—</p>
+            <p id="detailHargaPaket" class="text-lg font-extrabold text-blue-600 dark:text-blue-400 mt-1">Rp 0</p>
+        </div>
 
+        <form id="formProsesPembayaran" action="{{ route('user.member.beli') }}" method="POST" class="space-y-4">
+            @csrf
+            <input type="hidden" name="idPaket" id="submitIdPaket">
+            
+            <div class="space-y-3">
+                <label class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition">
+                    <input type="radio" name="metodePembayaran" value="cash" required checked
+                        class="w-4 h-4 text-blue-600 shrink-0">
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-gray-800 dark:text-white">💵 Bayar Tunai (Cash)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Bayar langsung via kasir di outlet gym.</p>
+                    </div>
+                </label>
+
+                <label class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition">
+                    <input type="radio" name="metodePembayaran" value="qris"
+                        class="w-4 h-4 text-blue-600 shrink-0">
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-gray-800 dark:text-white">📱 QRIS / Online Payment</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Otomatis aktif setelah pembayaran Midtrans berhasil.</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <button type="button" onclick="kembaliKeModalBeli()"
+                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
+                    Kembali
+                </button>
+                <button type="submit"
+                    class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 transition">
+                    Konfirmasi & Bayar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 {{-- ===== MODAL EDIT MEMBER ===== --}}
 @if($member)
 <div id="modalEditMember" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
-        <div class="flex items-center justify-between mb-5">
-            <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Edit Data Member</h4>
-            <button onclick="document.getElementById('modalEditMember').classList.add('hidden')"
-                class="text-gray-400 hover:text-gray-600">✕</button>
-        </div>
-        <form action="{{ route('user.member.edit') }}" method="POST" class="space-y-4">
-            @csrf
-
-            {{-- Status (read-only) --}}
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status Member</label>
-                <div class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 dark:border-gray-700 dark:bg-gray-800">
-                    @if($member->statusMember === 'aktif')
-                    <span class="text-xs font-semibold px-2 py-1 rounded-full bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-400">Aktif</span>
-                    @elseif(is_null($member->tanggalDaftar))
-                    <span class="text-xs font-semibold px-2 py-1 rounded-full bg-yellow-50 text-yellow-600 dark:bg-yellow-500/15 dark:text-yellow-400">Menunggu Konfirmasi</span>
-                    @else
-                    <span class="text-xs font-semibold px-2 py-1 rounded-full bg-red-50 text-red-500 dark:bg-red-500/15 dark:text-red-400">Tidak Aktif</span>
-                    @endif
-                </div>
-            </div>
-
-            {{-- No Telp --}}
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Telepon</label>
-                <input type="text" name="noTelp" value="{{ $member->noTelp }}"
-                    placeholder="08xxxxxxxxxx"
-                    class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            {{-- Paket --}}
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Paket Member</label>
-                <select name="idPaket" required
-                    class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    @foreach($paketList as $p)
-                    <option value="{{ $p->idPaket }}" {{ $member->idPaket == $p->idPaket ? 'selected' : '' }}>
-                        {{ $p->namaPaket }} ({{ $p->durasiPaket }} hari) — Rp {{ number_format($p->hargaPaket, 0, ',', '.') }}
-                    </option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
-                    ⚠️ Ganti paket akan memerlukan konfirmasi ulang dari admin.
-                </p>
-            </div>
-
-            <div class="flex justify-end gap-3 pt-2">
-                <button type="button" onclick="document.getElementById('modalEditMember').classList.add('hidden')"
-                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
-                    Batal
-                </button>
-                <button type="submit"
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                    Simpan
-                </button>
-            </div>
-        </form>
     </div>
-</div>
 @endif
+
+{{-- ===== LOGIC INTERAKSI MODAL & TRANSFER DATA ===== --}}
+<script>
+    function bukaModalPembayaran() {
+        // Ambil input radio paket yang dipilih oleh user
+        const paketTerpilih = document.querySelector('input[name="idPaket"]:checked');
+        
+        if (!paketTerpilih) {
+            alert('Silakan pilih paket member terlebih dahulu!');
+            return;
+        }
+
+        // Ekstraksi data nama dan harga dari element label wrapper-nya
+        const labelWrapper = paketTerpilih.closest('label');
+        const namaPaket = labelWrapper.querySelector('p.text-sm.font-semibold').innerText;
+        const hargaPaket = labelWrapper.querySelector('p.text-blue-600, p.text-blue-400').innerText;
+        const idPaket = paketTerpilih.value;
+
+        // Pasang data ke dalam elemen info modal pembayaran dan input hidden
+        document.getElementById('detailNamaPaket').innerText = namaPaket;
+        document.getElementById('detailHargaPaket').innerText = hargaPaket;
+        document.getElementById('submitIdPaket').value = idPaket;
+
+        // Tukar tampilan modal
+        document.getElementById('modalBeliMember').classList.add('hidden');
+        document.getElementById('Pembayaran').classList.remove('hidden');
+    }
+
+    function tutupModalPembayaran() {
+        document.getElementById('Pembayaran').classList.add('hidden');
+    }
+
+    function kembaliKeModalBeli() {
+        document.getElementById('Pembayaran').classList.add('hidden');
+        document.getElementById('modalBeliMember').classList.remove('hidden');
+    }
+</script>
 
 @endsection
