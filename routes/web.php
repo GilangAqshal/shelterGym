@@ -18,7 +18,7 @@ use App\Http\Controllers\User\MemberController as UserMemberController;
 use App\Http\Controllers\Admin\NotifikasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-
+use App\Http\Controllers\User\PaymentController; // <-- Menambahkan Import PaymentController
 
 // ─── Redirect root ───────────────────────────────────────
 Route::get('/', function () {
@@ -26,12 +26,11 @@ Route::get('/', function () {
 });
 
 // ─── Auth ────────────────────────────────────────────────
-// Di dalam routes/web.php kamu
 Route::get('/login', function () {
     return view('auth.login', ['startWithRegister' => false]);
 })->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', function () {
     return view('auth.login', ['startWithRegister' => true]);
 })->name('register');
@@ -90,7 +89,6 @@ Route::middleware(['auth', 'role:owner,admin'])
         Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
         Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
 
-        // 
         Route::post('notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markRead'])
             ->name('notifikasi.read');
         Route::post('notifikasi/read-all', [NotifikasiController::class, 'markAllRead'])
@@ -118,11 +116,23 @@ Route::middleware(['auth', 'role:user'])
         Route::post('/member/beli', [UserMemberController::class, 'beli'])->name('member.beli');
         Route::post('/member/edit', [UserMemberController::class, 'edit'])->name('member.edit');
         Route::post('/member/checkin', [UserMemberController::class, 'checkin'])->name('member.checkin');
+        
+        // Payment routes (Rute Baru)
+        Route::post('/payment/create', [PaymentController::class, 'createTransaction'])->name('payment.create');
+        Route::get('/payment/finish', [PaymentController::class, 'finish'])->name('payment.finish');
+        Route::get('/payment/error', [PaymentController::class, 'error'])->name('payment.error');
+        Route::get('/payment/pending', [PaymentController::class, 'pending'])->name('payment.pending');
+        Route::get('/payment/check-status', [PaymentController::class, 'checkStatus'])->name('payment.check-status');
     });
 
+// ─── Midtrans Webhook (Tanpa Auth & CSRF) ─────────────────
+// Diletakkan di luar middleware 'auth' agar server Midtrans bisa mengaksesnya secara publik
+Route::post('/midtrans/callback', [PaymentController::class, 'callback'])
+    ->name('midtrans.callback')
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
     
-// ─── TailAdmin Demo Pages (ganti nama yang bentrok) ──────
-// ─── Merapihkan routes demo dari TailAdmin ──────
+// ─── TailAdmin Demo Pages ─────────────────────────────────
 Route::get('/papan', fn() => view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']))->name('dashboard.demo');
 Route::get('/calendar', fn() => view('pages.calender', ['title' => 'Calendar']))->name('calendar');
 Route::get('/profile-demo', fn() => view('pages.profile', ['title' => 'Profile']))->name('profile.demo');
