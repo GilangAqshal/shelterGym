@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
+use Midtrans\Transaction; // tambahkan di atas
 
 class PaymentController extends Controller
 {
@@ -223,48 +224,48 @@ class PaymentController extends Controller
     }
 
     // ── Aktivasi Member Setelah Pembayaran Sukses ─────────
-    private function aktivasiMember(Pembayaran $pembayaran)
-    {
-        $pembayaran->update(['status' => 'success']);
+    // ── Aktivasi Member Setelah Pembayaran Sukses ─────────
+private function aktivasiMember(Pembayaran $pembayaran)
+{
+    if ($pembayaran->status === 'success') {
+        return; // sudah pernah diaktivasi, jangan proses ulang
+    }
 
-        $user  = $pembayaran->user;
-        $paket = $pembayaran->paket;
+    $pembayaran->update(['status' => 'success']);
 
-        // Cek member sudah ada atau belum
-        $member = Member::where('idUser', $user->id)
-                    ->whereNull('tanggalDaftar')
-                    ->first();
+    $user  = $pembayaran->user;
+    $paket = $pembayaran->paket;
 
-        if ($member) {
-            $member->update([
-                'idPaket'       => $paket->idPaket,
-                'statusMember'  => 'aktif',
-                'tanggalDaftar' => today()->format('Y-m-d'),
-                'tanggalAkhir'  => today()->addDays($paket->durasiPaket)->format('Y-m-d'),
-            ]);
-        } else {
-            Member::create([
-                'noPendaftaran' => $this->generateNoPendaftaran(),
-                'kodeMember'    => $this->generateKodeMember(),
-                'idUser'        => $user->id,
-                'idPaket'       => $paket->idPaket,
-                'noTelp'        => $user->noTelp,
-                'statusMember'  => 'aktif',
-                'tanggalDaftar' => today()->format('Y-m-d'),
-                'tanggalAkhir'  => today()->addDays($paket->durasiPaket)->format('Y-m-d'),
-            ]);
-        }
+    $member = Member::where('idUser', $user->id)->first();
 
-        // Notifikasi ke admin
-        Notifikasi::create([
-            'judul'  => '✅ Pembayaran Online Berhasil',
-            'pesan'  => "{$user->name} berhasil membayar paket {$paket->namaPaket} via online. Membership sudah otomatis aktif.",
-            'idUser' => $user->id,
-            'tipe'   => 'pembelian_member',
-            'isRead' => 0,
+    if ($member) {
+        $member->update([
+            'idPaket'       => $paket->idPaket,
+            'statusMember'  => 'aktif',
+            'tanggalDaftar' => today()->format('Y-m-d'),
+            'tanggalAkhir'  => today()->addDays($paket->durasiPaket)->format('Y-m-d'),
+        ]);
+    } else {
+        Member::create([
+            'noPendaftaran' => $this->generateNoPendaftaran(),
+            'kodeMember'    => $this->generateKodeMember(),
+            'idUser'        => $user->id,
+            'idPaket'       => $paket->idPaket,
+            'noTelp'        => $user->noTelp,
+            'statusMember'  => 'aktif',
+            'tanggalDaftar' => today()->format('Y-m-d'),
+            'tanggalAkhir'  => today()->addDays($paket->durasiPaket)->format('Y-m-d'),
         ]);
     }
 
+    Notifikasi::create([
+        'judul'  => '✅ Pembayaran Online Berhasil',
+        'pesan'  => "{$user->name} berhasil membayar paket {$paket->namaPaket} via online. Membership sudah otomatis aktif.",
+        'idUser' => $user->id,
+        'tipe'   => 'pembelian_member',
+        'isRead' => 0,
+    ]);
+}
     // ── Halaman Finish / Error / Pending ─────────────────
     public function finish(Request $request)
     {
@@ -285,18 +286,48 @@ class PaymentController extends Controller
     }
 
     // ── Status Pembayaran (untuk polling JS) ──────────────
-    public function checkStatus(Request $request)
-    {
-        $orderId    = $request->orderId;
-        $pembayaran = Pembayaran::where('orderId', $orderId)->first();
+// ── Status Pembayaran (untuk polling JS) ──────────────
+public function checkStatus(Request $request)
+{
+    $orderId = $request->query('orderId');
 
-        if (!$pembayaran) {
-            return response()->json(['status' => 'not_found']);
-        }
-
-        return response()->json([
-            'status'  => $pembayaran->status,
-            'orderId' => $pembayaran->orderId,
-        ]);
+    if (!$orderId) {
+        return response()->json(['status' => 'invalid_request']);
     }
+
+    $pembayaran = Pembayaran::where('orderId', $orderId)->first();
+
+    if (!$pembayaran) {
+        return response()->json(['status' => 'not_found']);
+    }
+
+    // Kalau status lokal belum final, tanya langsung ke Midtrans
+    if (!in_array($pembayaran->status, ['success', 'cancel', 'deny', 'expire'])) {
+        try {
+            $status = Transaction::status($orderId);
+            $status = is_array($status) ? (object) $status : $status;
+
+            $transactionStatus = $status->transaction_status;
+            $fraudStatus       = $status->fraud_status ?? 'accept';
+
+            Log::info("checkStatus [{$orderId}] => transaction_status: {$transactionStatus}, fraud_status: {$fraudStatus}");
+
+            if (($transactionStatus === 'capture' && $fraudStatus === 'accept')
+                || $transactionStatus === 'settlement') {
+                $this->aktivasiMember($pembayaran);
+            } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+                $pembayaran->update(['status' => $transactionStatus]);
+            }
+
+            $pembayaran->refresh();
+        } catch (\Exception $e) {
+            Log::error("checkStatus GAGAL ({$orderId}): " . $e->getMessage());
+        }
+    }
+
+    return response()->json([
+        'status'  => $pembayaran->status,
+        'orderId' => $pembayaran->orderId,
+    ]);
+}
 }

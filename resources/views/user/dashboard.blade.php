@@ -417,6 +417,34 @@
     </div>
 </div>
 @endif
+{{-- ===== MODAL MENUNGGU PEMBAYARAN VA ===== --}}
+<div id="modalMenunggu" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-black/70">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 text-center max-w-sm mx-4">
+        <div class="flex justify-center mb-4">
+            <svg class="animate-pulse h-12 w-12 text-yellow-500" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <p class="text-base font-semibold text-gray-800 dark:text-white mb-1">Menunggu Pembayaran</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            Order ID: <span id="menungguOrderId" class="font-mono">-</span>
+        </p>
+        <p class="text-xs text-gray-400 mb-5">
+            Sistem akan otomatis mendeteksi setelah kamu membayar.
+            <br>Untuk sandbox VA, bayar via
+            <a href="https://simulator.sandbox.midtrans.com/bca/va/index" target="_blank" class="text-blue-600 underline">simulator Midtrans</a>.
+        </p>
+        <button onclick="cekManualSekarang(document.getElementById('menungguOrderId').innerText)"
+            class="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition mb-2">
+            🔄 Cek Status Sekarang
+        </button>
+        <button onclick="document.getElementById('modalMenunggu').classList.add('hidden'); clearInterval(pollingInterval);"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400">
+            Tutup (lanjutkan nanti)
+        </button>
+    </div>
+</div>
 
 {{-- ===== FORM HIDDEN untuk submit Cash ===== --}}
 <form id="formCash" action="{{ route('user.payment.create') }}" method="POST" class="hidden">
@@ -435,6 +463,9 @@
         id: null, nama: '', harga: 0, hargaFormat: '', durasi: 0
     };
 
+    let pollingInterval = null;
+    let pollingCount = 0;
+
     // ── Step 1: Pilih paket → lanjut ke pilih metode ─────
     function lanjutKePembayaran() {
         const radio = document.querySelector('input[name="pilihanPaket"]:checked');
@@ -452,12 +483,10 @@
             durasi     : label.dataset.durasi,
         };
 
-        // Update info di modal pembayaran
         document.getElementById('infoPaketNama').innerText   = selectedPaket.nama;
         document.getElementById('infoPaketHarga').innerText  = selectedPaket.hargaFormat;
         document.getElementById('infoPaketDurasi').innerText = selectedPaket.durasi + ' hari';
 
-        // Tukar modal
         document.getElementById('modalBeliMember').classList.add('hidden');
         document.getElementById('modalPembayaran').classList.remove('hidden');
     }
@@ -477,7 +506,6 @@
         }
 
         if (metode === 'cash') {
-            // Submit form cash biasa
             document.getElementById('cashIdPaket').value = selectedPaket.id;
             document.getElementById('formCash').submit();
             return;
@@ -509,20 +537,26 @@
                 return;
             }
 
+            const orderId = data.orderId;
+
             // Buka Snap popup
             snap.pay(data.snapToken, {
                 onSuccess: function(result) {
-                    window.location.href = '{{ route("user.payment.finish") }}';
+                    console.log('Snap onSuccess:', result);
+                    konfirmasiSetelahBayar(orderId, 'finish');
                 },
                 onPending: function(result) {
-                    window.location.href = '{{ route("user.payment.pending") }}';
+                    console.log('Snap onPending:', result);
+                    konfirmasiSetelahBayar(orderId, 'pending');
                 },
                 onError: function(result) {
+                    console.log('Snap onError:', result);
                     window.location.href = '{{ route("user.payment.error") }}';
                 },
                 onClose: function() {
-                    // User menutup popup tanpa bayar
-                    document.getElementById('modalPembayaran').classList.remove('hidden');
+                    console.log('Snap ditutup user tanpa selesai bayar');
+                    // User mungkin sudah dapat nomor VA tapi belum bayar
+                    konfirmasiSetelahBayar(orderId, 'close');
                 }
             });
         })
@@ -531,6 +565,84 @@
             document.getElementById('modalPembayaran').classList.remove('hidden');
             alert('Terjadi kesalahan. Silakan coba lagi.');
             console.error(err);
+        });
+    }
+
+    // ── Step 3: WAJIB cek status ke backend SEBELUM redirect ──
+    function konfirmasiSetelahBayar(orderId, tipe) {
+        document.getElementById('modalLoading').classList.remove('hidden');
+
+        fetch(`{{ route('user.payment.check-status') }}?orderId=${orderId}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('modalLoading').classList.add('hidden');
+            console.log('Hasil checkStatus:', data);
+
+            if (data.status === 'success') {
+                window.location.href = '{{ route("user.payment.finish") }}';
+            } else if (['cancel', 'deny', 'expire'].includes(data.status)) {
+                window.location.href = '{{ route("user.payment.error") }}';
+            } else {
+                // Masih pending (kasus VA belum dibayar) → mulai polling
+                mulaiPollingStatus(orderId);
+            }
+        })
+        .catch(err => {
+            document.getElementById('modalLoading').classList.add('hidden');
+            console.error('Gagal cek status:', err);
+            mulaiPollingStatus(orderId);
+        });
+    }
+
+    // ── Polling otomatis tiap 5 detik (untuk kasus VA / pending) ──
+    function mulaiPollingStatus(orderId) {
+        document.getElementById('modalMenunggu').classList.remove('hidden');
+        document.getElementById('menungguOrderId').innerText = orderId;
+
+        pollingCount = 0;
+        if (pollingInterval) clearInterval(pollingInterval);
+
+        pollingInterval = setInterval(() => {
+            pollingCount++;
+
+            fetch(`{{ route('user.payment.check-status') }}?orderId=${orderId}`, {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Polling #' + pollingCount + ':', data);
+                if (data.status === 'success') {
+                    clearInterval(pollingInterval);
+                    window.location.href = '{{ route("user.payment.finish") }}';
+                } else if (['cancel', 'deny', 'expire'].includes(data.status)) {
+                    clearInterval(pollingInterval);
+                    window.location.href = '{{ route("user.payment.error") }}';
+                }
+            })
+            .catch(err => console.error('Polling error:', err));
+
+            if (pollingCount >= 60) {
+                clearInterval(pollingInterval); // stop setelah ±5 menit
+            }
+        }, 5000);
+    }
+
+    function cekManualSekarang(orderId) {
+        fetch(`{{ route('user.payment.check-status') }}?orderId=${orderId}`, {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Cek manual:', data);
+            if (data.status === 'success') {
+                clearInterval(pollingInterval);
+                window.location.href = '{{ route("user.payment.finish") }}';
+            } else {
+                alert('Pembayaran belum terdeteksi (status: ' + data.status + '). Pastikan sudah bayar VA di simulator, lalu coba cek lagi.');
+            }
         });
     }
 </script>
