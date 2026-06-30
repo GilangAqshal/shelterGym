@@ -224,7 +224,6 @@ class PaymentController extends Controller
     }
 
     // ── Aktivasi Member Setelah Pembayaran Sukses ─────────
-    // ── Aktivasi Member Setelah Pembayaran Sukses ─────────
 private function aktivasiMember(Pembayaran $pembayaran)
 {
     if ($pembayaran->status === 'success') {
