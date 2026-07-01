@@ -76,9 +76,7 @@
                         <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    <span class="text-gray-600 dark:text-gray-400">
-                        {{ $user->tanggalLahir ? \Carbon\Carbon::parse($user->tanggalLahir)->translatedFormat('d F Y') : 'Belum diisi' }}
-                    </span>
+                   
                 </div>
             </div>
 
@@ -132,14 +130,6 @@
                             <option value="Perempuan" {{ old('jenisKelamin', $user->jenisKelamin) === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                         </select>
                     </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Lahir</label>
-                    <input type="text" name="tanggalLahir"
-                        value="{{ old('tanggalLahir', $user->tanggalLahir) }}"
-                        class="datepicker w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Pilih tanggal lahir">
                 </div>
 
                 <div>
