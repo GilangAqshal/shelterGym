@@ -22,7 +22,7 @@
             <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-4 drop-shadow-md">WELCOME</h2>
             <p class="text-lg md:text-xl font-medium tracking-widest text-blue-200 uppercase mb-6">SHELTER GYM</p>
             <p class="text-blue-100 text-sm md:text-base leading-relaxed mb-8 opacity-90">
-                Mulai perjalanan transformasimu bersama kami. Panel latihan modern, pelacakan keanggotaan, dan komunitas kebugaran terbaik menantimu di sini.
+                Mulai perjalanan transformasimu bersama kami. Panel latihan modernn, pelacakan keanggotaan, dan komunitas kebugaran terbaik menantimu di sini.
             </p>
             
             <a href="{{ route('login') }}" class="inline-block border-2 border-white text-white font-semibold px-8 py-3 rounded-xl hover:bg-white hover:text-blue-700 transition duration-300 transform active:scale-95 shadow-md text-center cursor-pointer">
